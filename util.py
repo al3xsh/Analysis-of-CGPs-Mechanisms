@@ -1,7 +1,7 @@
 '''
 Collection of utility functions with no other obvious home.
 '''
-from itertools import izip, cycle
+from itertools import cycle
 from collections import defaultdict
 import json
 import os
@@ -13,7 +13,7 @@ def diff_count(data1, data2):
     '''
     Count the number of differences is two sets of data
     '''
-    return sum(x != y for x, y in izip(data1, data2))
+    return sum(x != y for x, y in zip(data1, data2))
 
 
 def open_file_method(filename):

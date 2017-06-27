@@ -37,7 +37,7 @@ def cmap_discretize(cmap, N):
     cdict = {}
     for ki, key in enumerate(('red', 'green', 'blue')):
         cdict[key] = [(indices[i], colors_rgba[i - 1, ki],
-                       colors_rgba[i, ki]) for i in xrange(N + 1)]
+                       colors_rgba[i, ki]) for i in range(N + 1)]
     # Return colormap object.
     return matplotlib.colors.LinearSegmentedColormap(cmap.name + "_%d" % N,
                                                      cdict, 1024)
@@ -55,7 +55,7 @@ if __name__ == '__main__':
     for filename in sys.argv[1:]:
         base = path.basename(filename)
         try:
-            print 'Processing file', filename
+            print('Processing file', filename)
             outname = base.split('_')[:3]
             with open_file_method(filename)(filename, 'r') as f:
                 data = json.load(f)
@@ -64,21 +64,21 @@ if __name__ == '__main__':
             stripped = {}
             best_worst = max(best_worst, data[1]['bests'][0]['fitness'])
             for best in data[1]['bests']:
-                stripped[best['fitness']] = map(int, best['never_active'])
+                stripped[best['fitness']] = list(map(int, best['never_active']))
                 levels.add(best['fitness'])
             storage.append(stripped)
             filecount += 1
         except ValueError:
-            print filename, "FAILED"
-    print "Loaded", filecount
-    print "Median final never active", median_deviation(percentages)
+            print(filename, "FAILED")
+    print("Loaded", filecount)
+    print("Median final never active", median_deviation(percentages))
 
     # Limits the number of unique fitness levels to plot
     ysteps = 40
     scan_lines = [x for x in sorted(levels) if x >= best_worst]
     if len(scan_lines) > ysteps:
         step = float(len(scan_lines)) / ysteps
-        print 'Step', step, 'highest', int(step * (ysteps - 1)), len(scan_lines)
+        print('Step', step, 'highest', int(step * (ysteps - 1)), len(scan_lines))
         scan_lines = [scan_lines[int(x * step)] for x in range(ysteps)]
         # Ensure that the maximum fitness is always added to the scan lines
         if scan_lines[-1] != max(levels):
@@ -86,7 +86,7 @@ if __name__ == '__main__':
     combined = defaultdict(list)
     for stored in storage:
         index = 0
-        fitnesses, values = zip(*sorted(stored.items()))
+        fitnesses, values = list(zip(*sorted(stored.items())))
         # Finds the update closest to the scan line without going over
         for scan_line in scan_lines:
             while index < len(fitnesses) and fitnesses[index] <= scan_line:
@@ -98,7 +98,7 @@ if __name__ == '__main__':
                 index = 0
 
     for level, data in sorted(combined.items()):
-        print len(data), 'runs reached fitness', level
+        print(len(data), 'runs reached fitness', level)
     # Create the heatmap matrix
     Z = []
     complete_levels = []
@@ -118,9 +118,9 @@ if __name__ == '__main__':
                       if len(group) > 0]
             Z.append(merged)
             complete_levels.append(level)
-    print 'Fitness levels reached by all runs:', len(complete_levels)
+    print('Fitness levels reached by all runs:', len(complete_levels))
     Z = np.array(Z).transpose()
-    X, Y = np.meshgrid(range(0, genome_size + 1, genome_size / groups), complete_levels)
+    X, Y = np.meshgrid(list(range(0, genome_size + 1, genome_size / groups)), complete_levels)
     im = plt.pcolormesh(X, Y, Z.transpose(), cmap=cmap_discretize("binary", 5), vmin=0, vmax=100)
     cbar = plt.colorbar(im, orientation='horizontal')
     cbar.set_label("Percentage Of Runs Where Node Was Never Active")

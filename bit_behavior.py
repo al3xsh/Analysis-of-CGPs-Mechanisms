@@ -30,7 +30,7 @@ if __name__ == '__main__':
     for filename in sys.argv[1:]:
         base = path.basename(filename)
         try:
-            print 'Processing file', filename
+            print('Processing file', filename)
             with open_file_method(filename)(filename, 'r') as f:
                 data = json.load(f)
             # Converts the filename into a key
@@ -48,17 +48,17 @@ if __name__ == '__main__':
                 combined[version][test].append(percentage * 100)
             filecount += 1
         except ValueError:
-            print filename, "FAILED"
-    print "Loaded", filecount
+            print(filename, "FAILED")
+    print("Loaded", filecount)
     # Finds the median results for each of the statistics
-    for version, table in combined.items():
+    for version, table in list(combined.items()):
         for test, line in sorted(table.items()):
             combined[version][test] = find_median(line)
     # print the information in sorted order based on the first key
-    for version in sorted(combined.keys(), key=lambda version: combined[version][interesting[0]]):
+    for version in sorted(list(combined.keys()), key=lambda version: combined[version][interesting[0]]):
         duplicate, ordering = version
         duplicate = ('\emph{%s}' % pretty_name[duplicate]).rjust(18)
         ordering = ('\emph{%s}' % pretty_name[ordering]).rjust(14)
         # LaTeX formatting
-        print ' & '.join([duplicate, ordering] + ["{0:.2f}\%".format(combined[version][test])
-                                                  for test in interesting]) + ' \\\\ \hline'
+        print(' & '.join([duplicate, ordering] + ["{0:.2f}\%".format(combined[version][test])
+                                                  for test in interesting]) + ' \\\\ \hline')

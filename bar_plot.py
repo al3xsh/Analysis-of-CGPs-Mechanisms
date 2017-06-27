@@ -34,7 +34,7 @@ if __name__ == '__main__':
     for filename in sys.argv[1:]:
         base = path.basename(filename)
         try:
-            print 'Processing file', filename
+            print('Processing file', filename)
             # Load the file
             with open_file_method(filename)(filename, 'r') as f:
                 data = json.load(f)
@@ -83,8 +83,8 @@ if __name__ == '__main__':
                 behavior[key][activity] += 1
             filecount += 1
         except ValueError:
-            print filename, "FAILED"
-    print "Loaded", filecount
+            print(filename, "FAILED")
+    print("Loaded", filecount)
 
     # Plotting tools
     one = ('Used', 'Explore')

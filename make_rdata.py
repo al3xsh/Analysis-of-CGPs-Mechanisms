@@ -5,7 +5,7 @@ executable in the form of:
 
 ``python make_rdata.py final/*.dat.gz > rdata.csv``
 '''
-from __future__ import print_function
+
 import sys
 from os import path
 import json

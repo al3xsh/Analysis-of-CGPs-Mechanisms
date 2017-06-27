@@ -57,17 +57,17 @@ if __name__ == '__main__':
             reduced[version].append(len(simplified.active))
             filecount += 1
         except ValueError:
-            print filename, "FAILED"
+            print(filename, "FAILED")
 
     # Kruskal's requires a rectangular matrix
-    rect = make_rectangular(statify.values(), 10000001)
+    rect = make_rectangular(list(statify.values()), 10000001)
 
-    print 'Files Successfully Loaded', filecount
-    print 'Kruskal Wallis', kruskalwallis(rect)
-    for version, data in statify.iteritems():
-        print '--------- %s ---------' % str(version)
-        print "MES, MAD", median_deviation(data)
-        print 'Active', median_deviation(active[version])
-        print 'Reduced', median_deviation(reduced[version])
-        print 'Mann Whitney U against Control',
-        print mannwhitneyu(statify[control_group], data)
+    print('Files Successfully Loaded', filecount)
+    print('Kruskal Wallis', kruskalwallis(rect))
+    for version, data in statify.items():
+        print('--------- %s ---------' % str(version))
+        print("MES, MAD", median_deviation(data))
+        print('Active', median_deviation(active[version]))
+        print('Reduced', median_deviation(reduced[version]))
+        print('Mann Whitney U against Control', end=' ')
+        print(mannwhitneyu(statify[control_group], data))

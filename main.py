@@ -58,27 +58,27 @@ def one_run(evaluator, config, frequencies):
     generator = enumerate(multi_indepenedent(config, output, frequencies))
     for evals, individual in generator:
         individual.fitness = evaluator.get_fitness(individual)
-        if best < individual:
+        if best == None or best < individual:
             best = individual
             last_improved = evals
             if config['record_bests']:
                 save = best.dump()
                 save['evals'] = evals
                 output['bests'].append(save)
-                output['test_inputs'] = sorted(best.input_order.keys(),
+                output['test_inputs'] = sorted(list(best.input_order.keys()),
                                                key=best.input_order.__getitem__)
             if config['verbose']:
-                print '\t', last_improved, best.fitness, len(best.active)
+                print('\t', last_improved, best.fitness, len(best.active))
         if (evals >= config['max_evals'] or
             best.fitness >= config['max_fitness']):
             break
     if config['verbose']:
-        print "Best Found"
-        print 'Before simplify', best.fitness, len(best.active)
+        print("Best Found")
+        print('Before simplify', best.fitness, len(best.active))
         best.show_active()
         simplified = best.new(Individual.simplify)
         simplified.fitness = evaluator.get_fitness(simplified)
-        print "After simplify", simplified.fitness, len(simplified.active)
+        print("After simplify", simplified.fitness, len(simplified.active))
         simplified.show_active()
     output.update({'fitness': best.fitness, 'evals': evals,
                    'success': best.fitness >= config['max_fitness'],
@@ -119,12 +119,12 @@ def all_runs(config):
     frequencies = defaultdict(int)
     try:
         for run in range(config['runs']):
-            print "Starting Run", run + 1
+            print("Starting Run", run + 1)
             result = one_run(evaluator, config, frequencies)
-            print [(key, result[key]) for key in ['evals', 'fitness']]
+            print([(key, result[key]) for key in ['evals', 'fitness']])
             results.append(result)
     except KeyboardInterrupt:
-        print "Interrupted"
+        print("Interrupted")
     return results, frequencies
 
 
@@ -143,13 +143,13 @@ def combine_results(results):
     successful = [result for result in results if result['success']]
     # Combine like keys across all runs
     for result in results:
-        for key, value in result.iteritems():
+        for key, value in result.items():
             try:
                 combined[key].append(value)
             except KeyError:
                 combined[key] = [value]
     # Analyze the values for each key
-    for key, value in combined.items():
+    for key, value in list(combined.items()):
         try:
             combined[key] = util.median_deviation(value)
         except TypeError:
@@ -227,7 +227,7 @@ if __name__ == '__main__':
     if args.seed != None:
         config['seed'] = args.seed
     elif 'seed' not in config:
-        config['seed'] = random.randint(0, sys.maxint)
+        config['seed'] = random.randint(0, sys.maxsize)
     random.seed(config['seed'])
 
     # Allow the command line to override configuration file specifications
@@ -265,7 +265,7 @@ if __name__ == '__main__':
         # Perform the actual run of the experiment
         raw_results, frequencies = all_runs(config)
         combined = sorted(combine_results(raw_results).items())
-        print combined
+        print(combined)
         if args.output_results != None:
             # Output the results, with the combined stuff on the first line
             util.save_list(args.output_results, [combined] + raw_results)
@@ -280,4 +280,4 @@ if __name__ == '__main__':
             processed = frequencies_to_vector(config, frequencies)
             util.save_configuration(args.frequency_results, processed)
     except KeyError as e:
-        print 'You must include a configuration value for', e.args[0]
+        print('You must include a configuration value for', e.args[0])

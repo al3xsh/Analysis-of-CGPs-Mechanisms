@@ -1,0 +1,4 @@
+[
+[["child_replaced_parent", [263, 0]], ["estimated", [393.06378480275015, 0.0]], ["evals", [1114, 0]], ["fitness", [1.0, 0.0]], ["normal", [1114, 0]], ["parent_not_replaced", [15, 0]], ["phenotype", [28, 0]], ["skipped", [0, 0]], ["success", [1.0, 0]], ["unused", [102, 0]]],
+{"bests": [], "skipped": 0, "estimated": 393.06378480275015, "inactive_bits_changed": {"2": 26, "0": 50, "1": 6, "3": 8, "5": 4, "4": 17, "7": 1, "8": 2, "6": 9}, "reactivated_nodes": {"0": 206, "1": 31, "2": 12, "6": 3, "3": 7, "10": 2, "5": 1, "4": 1}, "active_nodes_changed": {"3": 26, "2": 58, "4": 24, "5": 10, "0": 69, "1": 44, "6": 7, "10": 3, "7": 6, "11": 4, "13": 2, "9": 3, "8": 3, "15": 2, "12": 1, "19": 1}, "active_bits_changed": {"2": 256, "1": 254, "3": 56, "8": 28, "5": 11, "4": 62, "6": 12, "7": 1}, "child_replaced_parent": 263, "parent_not_replaced": 15, "fitness": 1.0, "evals": 1114, "success": true, "phenotype": 28, "normal": 1114, "unused": 102}
+]

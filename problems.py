@@ -2,7 +2,8 @@
 Defines each of the benchmark problems used as well as the function sets
 for those problems.
 '''
-from operator import or_, and_, add, sub, mul, div, xor
+from operator import or_, and_, add, sub, mul, xor
+from operator import truediv as div
 import itertools
 import random
 import math
@@ -184,8 +185,8 @@ def float_samples(config):
       - ``samples``: The number of samples to draw.
     '''
     return ([random.uniform(config['min'], config['max'])
-             for _ in xrange(config['input_length'])]
-            for _ in xrange(config['samples']))
+             for _ in range(config['input_length'])]
+            for _ in range(config['samples']))
 
 
 def float_range(config):
@@ -294,7 +295,7 @@ class Binary_Multiply(Bounded_Problem, Binary_Mixin):
         multiplied = bin(int(a, 2) * int(b, 2))[2:]
         # pad the result to have enough bits
         extended = multiplied.rjust(len(inputs), '0')
-        return map(int, extended)
+        return list(map(int, extended))
 
 
 class Binary_Multiply_Miller(Binary_Multiply):
@@ -347,7 +348,7 @@ class Binary_Encode(Bounded_Problem, Binary_Mixin):
         oneat = inputs.index(1)
         binary = bin(oneat)[2:]
         width = math.log(len(inputs), 2)
-        return map(int, binary.zfill(int(width)))
+        return list(map(int, binary.zfill(int(width))))
 
 
 class Binary_Decode(Bounded_Problem, Binary_Mixin):

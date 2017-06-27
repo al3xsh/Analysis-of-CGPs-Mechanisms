@@ -47,7 +47,7 @@ class Individual(object):
         self.never_active = [True] * graph_length
         self.input_counter = itertools.count(0)
         self.input_order = {}
-        self.fitness = -sys.maxint
+        self.fitness = -sys.maxsize
 
     def random_gene(self, index, invalid=None):
         '''
@@ -158,7 +158,7 @@ class Individual(object):
             dependent[current] = False
             return False
         # Create the list of all possible connections
-        options = range(-self.input_length, self.graph_length)
+        options = list(range(-self.input_length, self.graph_length))
         for index in range(len(options)):
             # Choose a random untried option and swap it to the next index
             swapdown = random.randrange(index, len(options))
@@ -204,7 +204,7 @@ class Individual(object):
         '''
         self.active = set(self.genes[-self.output_length:])
 
-        for node_index in reversed(range(self.graph_length)):
+        for node_index in reversed(list(range(self.graph_length))):
             if node_index in self.active:
                 # add all of the connection genes for this node
                 self.active.update(self.connections(node_index))
@@ -256,7 +256,7 @@ class Individual(object):
         when the fitness function analyzes nodes directly when combined with
         Single mutation.
         '''
-        self.active = range(self.graph_length)
+        self.active = list(range(self.graph_length))
 
     def evaluate(self, inputs):
         '''
@@ -346,7 +346,7 @@ class Individual(object):
         # Create a dictionary storing how to translate location information
         new_order = {i: i for i in range(-self.input_length, 0)}
         # Input locations start as addable
-        addable = new_order.keys()
+        addable = list(new_order.keys())
         counter = 0
         while addable:
             # Choose a node at random who's dependencies have already been met
@@ -443,9 +443,9 @@ class Individual(object):
         '''
         for node_index in self.active:
             node_start = self.node_step * node_index
-            print node_index, self.genes[node_start],
-            print self.connections(node_index), self.semantics[node_index]
-        print self.genes[-self.output_length:]
+            print(node_index, self.genes[node_start], end=' ')
+            print(self.connections(node_index), self.semantics[node_index])
+        print(self.genes[-self.output_length:])
 
     def __lt__(self, other):
         '''
@@ -509,7 +509,7 @@ class Individual(object):
         # Store a copy of the never active genes after reorder
         never_active = list(individual.never_active)
         # Set semantics values
-        individual.active = range(individual.graph_length)
+        individual.active = list(range(individual.graph_length))
         for inputs in test_inputs:
             individual.evaluate(tuple(inputs))
         individual.determine_active_nodes()
@@ -674,7 +674,7 @@ def multi_indepenedent(config, output, frequencies):
       individuals of different lengths are evolved.  Shared by all parallel
       populations.  Will contain all information output by ``generate``.
     '''
-    collective = itertools.izip(*[generate(config, output, frequencies)
+    collective = zip(*[generate(config, output, frequencies)
                                   for _ in range(config['pop_size'])])
     for next_iterations in collective:
         for next_iteration in next_iterations:
